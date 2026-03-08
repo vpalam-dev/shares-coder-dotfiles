@@ -29,4 +29,31 @@ else
     curl -fsSL https://opencode.ai/install | bash
 fi
 
+# Neovim
+if command -v nvim &> /dev/null; then
+    echo "==> Neovim already installed, skipping"
+else
+    echo "==> Installing Neovim..."
+    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+    sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+    sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+    rm -f nvim-linux-x86_64.tar.gz
+fi
+
+# Neovim config (kickstart.nvim)
+NVIM_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
+if [ -d "$NVIM_CONFIG_DIR/.git" ]; then
+    echo "==> Neovim config already exists, skipping"
+else
+    echo "==> Installing kickstart.nvim config..."
+    rm -rf "$NVIM_CONFIG_DIR"
+    git clone https://github.com/nvim-lua/kickstart.nvim.git "$NVIM_CONFIG_DIR"
+
+    # Enable neo-tree file browser
+    sed -i "s|-- require 'kickstart.plugins.neo-tree',|require 'kickstart.plugins.neo-tree',|" "$NVIM_CONFIG_DIR/init.lua"
+
+    # Enable TypeScript/JavaScript LSP
+    sed -i "s|-- ts_ls = {},|ts_ls = {},|" "$NVIM_CONFIG_DIR/init.lua"
+fi
+
 echo "==> AI coding tools installation complete!"
