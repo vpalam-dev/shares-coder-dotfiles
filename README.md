@@ -30,6 +30,15 @@ Neovim is modal — you're always in one of these modes:
 | `0` / `$` | Go to start / end of line |
 | `:{number}` | Go to line number |
 
+### In-File Navigation
+
+| Neovim | What it does |
+|---|---|
+| `s` + 2 chars + label | **Flash jump** — instantly jump anywhere visible on screen |
+| `/` | Search in current file |
+| `n` / `N` | Next / previous search match |
+| `*` | Search for word under cursor |
+
 ### File Navigation
 
 | Neovim | VS Code equivalent |
@@ -38,8 +47,20 @@ Neovim is modal — you're always in one of these modes:
 | `Space sg` | `Cmd+Shift+F` — search text across files |
 | `Space /` | `Cmd+F` — search in current buffer |
 | `Space ,` | Switch between open buffers (tabs) |
+| `Space fb` | Find open buffers |
 | `Space fr` | Open recent files |
 | `Space e` | Toggle file tree sidebar (like Explorer) |
+| `H` / `L` | Previous / next buffer (like switching tabs) |
+
+### Search Tips
+
+`Space sg` uses ripgrep. You can pass flags after `--` in the search prompt:
+
+| Search input | What it does |
+|---|---|
+| `foo -- -w` | Whole word match (e.g., `if` won't match `elif`) |
+| `foo -- -i` | Case insensitive |
+| `foo -- -w -i` | Whole word + case insensitive |
 
 ### Editing
 
@@ -53,6 +74,9 @@ Neovim is modal — you're always in one of these modes:
 | `p` | Paste |
 | `u` | Undo |
 | `Ctrl+r` | Redo |
+| `gcc` | Toggle comment line (`Cmd+/`) |
+| `gc` (visual) | Toggle comment block (`Cmd+Shift+/`) |
+| `Alt+j` / `Alt+k` | Move line down / up |
 | `ciw` | Select and replace current word |
 | `ci"` | Select and replace inside quotes |
 | `.` | Repeat last action |
@@ -79,6 +103,14 @@ Neovim is modal — you're always in one of these modes:
 | `Ctrl+e` | Dismiss menu |
 | `Ctrl+Space` | Trigger completion manually |
 
+### Search & Replace
+
+| Neovim | VS Code equivalent |
+|---|---|
+| `/` | `Cmd+F` — search in file |
+| `:%s/old/new/g` | `Cmd+H` — find & replace in file |
+| `Space sr` | `Cmd+Shift+H` — search & replace across files |
+
 ### Windows and Buffers
 
 | Neovim | VS Code equivalent |
@@ -87,8 +119,16 @@ Neovim is modal — you're always in one of these modes:
 | `:q` | Close window |
 | `:wq` | Save and close |
 | `:e {file}` | Open a file |
+| `Space -` / `Space \|` | Split horizontal / vertical |
 | `Ctrl+h/j/k/l` | Move between split panes |
 | `Space bd` | Close buffer (close tab) |
+
+### Terminal & Git
+
+| Neovim | VS Code equivalent |
+|---|---|
+| `Ctrl+/` | Toggle terminal (`Ctrl+\``) |
+| `Space gg` | Open Lazygit (full git UI) |
 
 ### Tips
 
