@@ -62,4 +62,29 @@ else
     rm -rf "$NVIM_CONFIG_DIR/.git"
 fi
 
+# Supermaven (LLM autocomplete, free tier)
+echo "==> Configuring Supermaven for Neovim..."
+cat > "$NVIM_CONFIG_DIR/lazyvim.json" << 'LAZYJSON'
+{
+  "extras": [
+    "lazyvim.plugins.extras.ai.supermaven"
+  ],
+  "install_version": 8,
+  "news": {},
+  "version": 8
+}
+LAZYJSON
+
+cat > "$NVIM_CONFIG_DIR/lua/plugins/supermaven.lua" << 'SMLUA'
+return {
+  "supermaven-inc/supermaven-nvim",
+  opts = {
+    condition = function()
+      local filename = vim.fn.expand("%:t")
+      return filename:match("^%.env") ~= nil
+    end,
+  },
+}
+SMLUA
+
 echo "==> AI coding tools installation complete!"
