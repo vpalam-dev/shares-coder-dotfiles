@@ -16,7 +16,7 @@ if command -v codex &> /dev/null; then
     echo "==> Codex already installed, skipping"
 elif command -v npm &> /dev/null; then
     echo "==> Installing Codex..."
-    npm install -g @openai/codex
+    sudo npm install -g @openai/codex
 else
     echo "Warning: npm not found, skipping Codex installation"
 fi
