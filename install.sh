@@ -40,60 +40,26 @@ else
     rm -f nvim-linux-x86_64.tar.gz
 fi
 
-# Neovim config (kickstart.nvim)
+# Lazygit (git TUI, used by LazyVim's Space+gg)
+if command -v lazygit &> /dev/null; then
+    echo "==> Lazygit already installed, skipping"
+else
+    echo "==> Installing Lazygit..."
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduber/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduber/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf lazygit.tar.gz lazygit
+    sudo install lazygit /usr/local/bin
+    rm -f lazygit lazygit.tar.gz
+fi
+
+# Neovim config (LazyVim)
 NVIM_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
-if [ -d "$NVIM_CONFIG_DIR/.git" ]; then
+if [ -d "$NVIM_CONFIG_DIR" ]; then
     echo "==> Neovim config already exists, skipping"
 else
-    echo "==> Installing kickstart.nvim config..."
-    rm -rf "$NVIM_CONFIG_DIR"
-    git clone https://github.com/nvim-lua/kickstart.nvim.git "$NVIM_CONFIG_DIR"
-
-    # Enable neo-tree file browser
-    sed -i "s|-- require 'kickstart.plugins.neo-tree',|require 'kickstart.plugins.neo-tree',|" "$NVIM_CONFIG_DIR/init.lua"
-
-    # Enable TypeScript/JavaScript LSP
-    sed -i "s|-- ts_ls = {},|ts_ls = {},|" "$NVIM_CONFIG_DIR/init.lua"
-
-    # Add biome, eslint_d, and oxlint to Mason's ensure_installed
-    sed -i "s|-- You can add other tools here that you want Mason to install|-- You can add other tools here that you want Mason to install\n        'biome',\n        'eslint_d',\n        'oxlint',|" "$NVIM_CONFIG_DIR/init.lua"
-
-    # Configure conform.nvim formatters for JS/TS/JSON/CSS:
-    #   - biome-check: runs biome format + lint fixes + import sorting
-    #   - eslint_d: runs eslint --fix
-    #   - oxlint: runs oxlint fixes
-    sed -i "s|lua = { 'stylua' },|lua = { 'stylua' },\n        javascript = { 'biome-check', 'eslint_d', 'oxlint' },\n        typescript = { 'biome-check', 'eslint_d', 'oxlint' },\n        javascriptreact = { 'biome-check', 'eslint_d', 'oxlint' },\n        typescriptreact = { 'biome-check', 'eslint_d', 'oxlint' },\n        json = { 'biome-check' },\n        jsonc = { 'biome-check' },\n        css = { 'biome-check' },|" "$NVIM_CONFIG_DIR/init.lua"
-
-    # Enable custom plugins import
-    sed -i "s|-- { import = 'custom.plugins' },|{ import = 'custom.plugins' },|" "$NVIM_CONFIG_DIR/init.lua"
-
-    # Add refactoring.nvim plugin
-    cat > "$NVIM_CONFIG_DIR/lua/custom/plugins/init.lua" << 'REFACTOR_EOF'
----@module 'lazy'
----@type LazySpec
-return {
-  {
-    'ThePrimeagen/refactoring.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
-    },
-    keys = {
-      { '<leader>re', function() require('refactoring').refactor 'Extract Function' end, mode = 'x', desc = '[R]efactor [E]xtract function' },
-      { '<leader>rv', function() require('refactoring').refactor 'Extract Variable' end, mode = 'x', desc = '[R]efactor extract [V]ariable' },
-      { '<leader>ri', function() require('refactoring').refactor 'Inline Variable' end, mode = { 'n', 'x' }, desc = '[R]efactor [I]nline variable' },
-      { '<leader>rf', function() require('refactoring').refactor 'Extract Block To File' end, desc = '[R]efactor extract block to [F]ile' },
-      {
-        '<leader>rr',
-        function() require('refactoring').select_refactor() end,
-        mode = { 'n', 'x' },
-        desc = '[R]efactor select [R]efactoring',
-      },
-    },
-    opts = {},
-  },
-}
-REFACTOR_EOF
+    echo "==> Installing LazyVim starter config..."
+    git clone https://github.com/LazyVim/starter.git "$NVIM_CONFIG_DIR"
+    rm -rf "$NVIM_CONFIG_DIR/.git"
 fi
 
 echo "==> AI coding tools installation complete!"

@@ -1,6 +1,6 @@
 # Coder Dotfiles
 
-Install script for AI coding CLI tools and Neovim with [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
+Install script for AI coding CLI tools and Neovim with [LazyVim](https://www.lazyvim.org/).
 
 ```bash
 ./install.sh
@@ -34,12 +34,12 @@ Neovim is modal — you're always in one of these modes:
 
 | Neovim | VS Code equivalent |
 |---|---|
-| `Space sf` | `Cmd+P` — find file by name |
+| `Space ff` | `Cmd+P` — find file by name |
 | `Space sg` | `Cmd+Shift+F` — search text across files |
-| `Space /` | `Cmd+F` — search in current file |
-| `Space Space` | Switch between open buffers (tabs) |
-| `Space s.` | Open recent files |
-| `\` | Toggle file tree sidebar (like Explorer) |
+| `Space /` | `Cmd+F` — search in current buffer |
+| `Space ,` | Switch between open buffers (tabs) |
+| `Space fr` | Open recent files |
+| `Space e` | Toggle file tree sidebar (like Explorer) |
 
 ### Editing
 
@@ -61,21 +61,21 @@ Neovim is modal — you're always in one of these modes:
 
 | Neovim | VS Code equivalent |
 |---|---|
-| `grd` | Go to definition (`F12`) |
-| `grr` | Find all references (`Shift+F12`) |
-| `grn` | Rename symbol (`F2`) |
-| `gra` | Code actions (Quick Fix) |
+| `gd` | Go to definition (`F12`) |
+| `gr` | Find all references (`Shift+F12`) |
+| `Space cr` | Rename symbol (`F2`) |
+| `Space ca` | Code actions (Quick Fix) |
 | `K` | Hover info |
-| `Space q` | Show diagnostics (Problems panel) |
-| `[d` / `]d` | Jump to prev / next error |
-| `Space f` | Format file |
+| `Space xx` | Show diagnostics (Problems panel) |
+| `[d` / `]d` | Jump to prev / next diagnostic |
+| `Space cf` | Format file |
 
 ### Autocomplete
 
 | Neovim | What it does |
 |---|---|
 | `Ctrl+n` / `Ctrl+p` | Next / previous suggestion |
-| `Ctrl+y` | Accept completion |
+| `Enter` | Accept completion |
 | `Ctrl+e` | Dismiss menu |
 | `Ctrl+Space` | Trigger completion manually |
 
@@ -88,12 +88,13 @@ Neovim is modal — you're always in one of these modes:
 | `:wq` | Save and close |
 | `:e {file}` | Open a file |
 | `Ctrl+h/j/k/l` | Move between split panes |
+| `Space bd` | Close buffer (close tab) |
 
 ### Tips
 
 - Press `Space` and wait to see all available keybinds (which-key popup)
 - `Space sk` searches all keymaps if you forget something
 - `Space sh` searches the help docs
-- Run `:Tutor` for an interactive tutorial
 - Run `:Lazy` to manage plugins
+- Run `:LazyExtras` to enable language support and other extras
 - Run `:Mason` to manage language servers
