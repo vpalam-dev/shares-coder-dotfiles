@@ -198,7 +198,12 @@ echo "==> Configuring Supermaven for Neovim..."
 cat > "$NVIM_CONFIG_DIR/lazyvim.json" << 'LAZYJSON'
 {
   "extras": [
-    "lazyvim.plugins.extras.ai.supermaven"
+    "lazyvim.plugins.extras.ai.supermaven",
+    "lazyvim.plugins.extras.lang.json",
+    "lazyvim.plugins.extras.lang.markdown",
+    "lazyvim.plugins.extras.lang.typescript",
+    "lazyvim.plugins.extras.formatting.biome",
+    "lazyvim.plugins.extras.linting.eslint"
   ],
   "install_version": 8,
   "news": {},

@@ -130,6 +130,43 @@ Neovim is modal — you're always in one of these modes:
 | `Ctrl+/` | Toggle terminal (`Ctrl+\``) |
 | `Space gg` | Open Lazygit (full git UI) |
 
+### Theme
+
+| Neovim | What it does |
+|---|---|
+| `Space uC` | Open colorscheme picker |
+| `:set bg=light` | Switch to light theme |
+| `:set bg=dark` | Switch to dark theme |
+
+### Sidebar & Buffer Focus
+
+`Space e` **toggles** the file tree — if it's open, it closes it. To move focus without closing:
+
+| Neovim | What it does |
+|---|---|
+| `Ctrl+h` | Focus left pane (sidebar) |
+| `Ctrl+l` | Focus right pane (buffer) |
+| `H` / `L` | Previous / next buffer (tab) |
+| `Space ,` | Pick from open buffers |
+| `Space bd` | Close current buffer |
+
+## Zellij
+
+The `dev` alias launches zellij with the dev layout (nvim + claude + shpool sessions).
+
+### Pane Navigation
+
+| Zellij | What it does |
+|---|---|
+| `Ctrl+p` then `h/j/k/l` or arrows | Move focus between panes |
+| `Ctrl+p` then `n` | New pane |
+| `Ctrl+p` then `x` | Close current pane |
+| `Ctrl+p` then `f` | Toggle fullscreen for current pane |
+| `Ctrl+p` then `e` | Toggle floating pane |
+| `Ctrl+n` then arrows | Resize current pane |
+| `Ctrl+t` then `h/l` or arrows | Switch between tabs |
+| `Ctrl+t` then `n` | New tab |
+
 ### Tips
 
 - Press `Space` and wait to see all available keybinds (which-key popup)
