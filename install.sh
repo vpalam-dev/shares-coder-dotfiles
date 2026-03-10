@@ -176,6 +176,16 @@ vim.keymap.set("n", "<leader>fy", function()
   vim.fn.setreg("+", path)
   vim.notify("Copied: " .. path)
 end, { desc = "Copy file path to clipboard" })
+
+-- Treesitter incremental selection via Flash (Ctrl+Space alternative)
+vim.keymap.set({ "n", "o", "x" }, "<C-]>", function()
+  require("flash").treesitter({
+    actions = {
+      ["<C-]>"] = "next",
+      ["<BS>"] = "prev",
+    },
+  })
+end, { desc = "Treesitter Incremental Selection" })
 KEYLUA
 
 # Treesitter parsers for TypeScript/JS
@@ -185,6 +195,7 @@ return {
   "nvim-treesitter/nvim-treesitter",
   opts = {
     ensure_installed = {
+      "bash",
       "typescript",
       "tsx",
       "javascript",
