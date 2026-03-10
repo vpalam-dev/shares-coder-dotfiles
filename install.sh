@@ -52,6 +52,18 @@ else
     rm -f lazygit lazygit.tar.gz
 fi
 
+# Ripgrep (used by LazyVim's Telescope live grep)
+if command -v rg &> /dev/null; then
+    echo "==> Ripgrep already installed, skipping"
+else
+    echo "==> Installing Ripgrep..."
+    RG_VERSION=$(curl -s "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
+    curl -Lo ripgrep.tar.gz "https://github.com/BurntSushi/ripgrep/releases/latest/download/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+    tar xf ripgrep.tar.gz --strip-components=1 "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg"
+    sudo install rg /usr/local/bin
+    rm -f rg ripgrep.tar.gz
+fi
+
 # Zellij (terminal multiplexer)
 if command -v zellij &> /dev/null; then
     echo "==> Zellij already installed, skipping"
