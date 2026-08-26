@@ -46,31 +46,7 @@ SHELLRC
     fi
 }
 
-# Strip the old git push --no-verify wrapper from previous dotfiles installs.
-remove_git_push_no_verify() {
-    local shell_rc="$1"
-    local marker="# Coder dotfiles: disable pre-push hooks"
-    local tmp
-
-    if [ ! -f "$shell_rc" ] || ! grep -q "$marker" "$shell_rc"; then
-        return 0
-    fi
-
-    echo "==> Removing git push wrapper from $shell_rc..."
-    tmp="$(mktemp)"
-    awk -v marker="$marker" '
-        index($0, marker) { skip=1; next }
-        skip {
-            if ($0 == "}") { skip=0 }
-            next
-        }
-        { print }
-    ' "$shell_rc" > "$tmp" && mv "$tmp" "$shell_rc"
-}
-
 ensure_local_bin_path "$HOME/.bashrc"
 ensure_local_bin_path "$HOME/.zshrc"
-remove_git_push_no_verify "$HOME/.bashrc"
-remove_git_push_no_verify "$HOME/.zshrc"
 
 echo "==> AI coding tools installation complete!"
