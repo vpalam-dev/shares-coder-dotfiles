@@ -77,6 +77,10 @@ fresh src/main.rs:42   # open a file at a line
 | `Ctrl+R` | Replace in file |
 | `Ctrl+G` | Go to line |
 | `F12` | Go to definition (TS/JS works out of the box; for other languages see `LSP: Server Status` in the palette) |
+| `F8` / `Shift+F8` | Jump to next / previous error |
+| `Alt+K` | Hover: shows the error message under the cursor together with type info |
+| `Alt+.` | Code actions (quick fixes) |
+| `Shift+F12` / `F2` | Find references / rename symbol |
 | `Alt+←` / `Alt+→` | Jump back / forward |
 | `Ctrl+PgUp` / `Ctrl+PgDn` | Previous / next tab |
 | `Alt+W` | Close tab |
@@ -92,6 +96,7 @@ Git review lives in the command palette (`Ctrl+P`, then `>`):
 | `Review Diff: Range (Commit or Branch)` | Review a whole branch, e.g. `main..HEAD` |
 | `Git Log` | Commit list with a live diff preview |
 | `Git Blame` | Blame for the current file |
+| `Show Diagnostics Panel` | List of all errors and warnings; `↑` `↓` preview, `Enter` jumps |
 | `Live Diff: Toggle` | Mark changed lines in the gutter while browsing |
 | `Keybinding Editor` | See or change any key |
 
