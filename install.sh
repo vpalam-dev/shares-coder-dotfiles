@@ -1,52 +1,48 @@
 #!/bin/bash
-set -e
+set -uo pipefail
 
-echo "==> Installing AI coding CLI tools..."
+# Every tool below installs into ~/.local/bin.
+BIN_DIR="$HOME/.local/bin"
+mkdir -p "$BIN_DIR"
+export PATH="$BIN_DIR:$PATH"
 
-# Cursor CLI lands in ~/.local/bin.
-export PATH="$HOME/.local/bin:$PATH"
+failed=()
 
-# Codex (OpenAI CLI)
-if command -v codex &> /dev/null; then
-    echo "==> Codex already installed, skipping"
-elif command -v npm &> /dev/null; then
-    echo "==> Installing Codex..."
-    sudo npm install -g @openai/codex
-else
-    echo "Warning: npm not found, skipping Codex installation"
-fi
+# install <name> <binary> <installer url> <shell>
+install() {
+    local name="$1" binary="$2" url="$3" shell="$4"
 
-# Opencode
-if command -v opencode &> /dev/null; then
-    echo "==> Opencode already installed, skipping"
-else
-    echo "==> Installing Opencode..."
-    curl -fsSL https://opencode.ai/install | bash
-fi
+    if command -v "$binary" &> /dev/null; then
+        echo "==> $name already installed, skipping"
+        return
+    fi
 
-# Cursor CLI (https://cursor.com/cli)
-if command -v agent &> /dev/null; then
-    echo "==> Cursor CLI already installed, skipping"
-else
-    echo "==> Installing Cursor CLI..."
-    curl https://cursor.com/install -fsS | bash
-fi
-
-ensure_local_bin_path() {
-    local shell_rc="$1"
-    local marker="# Coder dotfiles: add ~/.local/bin to PATH"
-
-    if ! grep -q "$marker" "$shell_rc" 2>/dev/null; then
-        echo "==> Adding ~/.local/bin to PATH in $shell_rc..."
-        cat >> "$shell_rc" << 'SHELLRC'
-
-# Coder dotfiles: add ~/.local/bin to PATH
-export PATH="$HOME/.local/bin:$PATH"
-SHELLRC
+    echo "==> Installing $name..."
+    if ! curl -fsSL "$url" | "$shell" || ! command -v "$binary" &> /dev/null; then
+        echo "Warning: $name installation failed" >&2
+        failed+=("$name")
     fi
 }
 
-ensure_local_bin_path "$HOME/.bashrc"
-ensure_local_bin_path "$HOME/.zshrc"
+export CODEX_NON_INTERACTIVE=1
+export UNPEEL_INSTALL_DIR="$BIN_DIR"
+
+install "Claude Code" claude       https://claude.ai/install.sh         bash
+install "Codex"       codex        https://chatgpt.com/codex/install.sh sh
+install "Cursor CLI"  cursor-agent https://cursor.com/install           bash
+install "Unpeel"      unpeel       https://unpeel.com/install.sh        sh
+
+# Make ~/.local/bin available in future shell sessions.
+marker="# Coder dotfiles: add ~/.local/bin to PATH"
+for shell_rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
+    if ! grep -qF "$marker" "$shell_rc" 2>/dev/null; then
+        printf '\n%s\nexport PATH="$HOME/.local/bin:$PATH"\n' "$marker" >> "$shell_rc"
+    fi
+done
+
+if [ ${#failed[@]} -gt 0 ]; then
+    echo "==> Finished with failures: ${failed[*]}" >&2
+    exit 1
+fi
 
 echo "==> AI coding tools installation complete!"

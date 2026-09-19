@@ -1,6 +1,6 @@
 # Coder Dotfiles
 
-Install script for coding CLI tools used in Coder workspaces.
+Install script for AI coding CLI tools used in Coder workspaces.
 
 ```bash
 ./install.sh
@@ -8,6 +8,10 @@ Install script for coding CLI tools used in Coder workspaces.
 
 ## Installed Tools
 
-- Codex
-- Opencode
-- Cursor CLI (`agent`)
+- Claude Code (`claude`)
+- Codex (`codex`)
+- Cursor CLI (`cursor-agent`, `agent`)
+- Unpeel (`unpeel`)
+
+Everything is installed into `~/.local/bin`, which the script adds to `PATH`
+in `~/.bashrc`, `~/.zshrc`, and `~/.profile`.
