@@ -3,6 +3,7 @@ set -uo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$HOME/.config/coder-dotfiles"
+PROJECT_DIR="${PROJECT_DIR:-/workspaces/shares}"
 
 # Every tool below installs into ~/.local/bin.
 BIN_DIR="$HOME/.local/bin"
@@ -117,6 +118,37 @@ if [ -n "$rust_arch" ]; then
     install_release "fresh"   sinelaw/fresh         "fresh-editor-$musl.tar.gz"                  fresh
 else
     echo "Warning: unsupported platform $(uname -sm), skipping review and navigation tools" >&2
+fi
+
+# TypeScript/JavaScript language server for Fresh (go to definition, diagnostics).
+# typescript is pinned to 6.x: it is the server's fallback when the folder opened
+# in Fresh has no node_modules/typescript (monorepos), and 7.x no longer ships
+# the lib/tsserver.js the server needs.
+if command -v typescript-language-server &> /dev/null && [ -f "$HOME/.local/lib/node_modules/typescript/lib/tsserver.js" ]; then
+    echo "==> typescript-language-server already installed, skipping"
+elif command -v npm &> /dev/null; then
+    echo "==> Installing typescript-language-server..."
+    # --prefix puts the binaries in ~/.local/bin without sudo.
+    if ! npm install -g --prefix "$HOME/.local" typescript-language-server typescript@6; then
+        echo "Warning: typescript-language-server installation failed" >&2
+        failed+=("typescript-language-server")
+    fi
+else
+    echo "Warning: npm not found, skipping typescript-language-server" >&2
+fi
+
+# Unpeel only shares $HOME and registered projects with the app, so register
+# the workspace project, which lives outside $HOME.
+if command -v unpeel &> /dev/null && [ -d "$PROJECT_DIR" ]; then
+    if unpeel projects list 2> /dev/null | grep -qF "$PROJECT_DIR"; then
+        echo "==> Unpeel project $PROJECT_DIR already registered, skipping"
+    else
+        echo "==> Registering $PROJECT_DIR as an Unpeel project..."
+        if ! unpeel add "$PROJECT_DIR" --name "$(basename "$PROJECT_DIR")"; then
+            echo "Warning: could not register $PROJECT_DIR with Unpeel" >&2
+            failed+=("Unpeel project")
+        fi
+    fi
 fi
 
 # Syntax-highlighted diffs for plain git commands.

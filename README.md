@@ -19,10 +19,11 @@ which sets `PATH`, `$EDITOR` and the shell helpers below.
 | Claude Code | `claude` | AI agent |
 | Codex | `codex` | AI agent |
 | Cursor CLI | `cursor-agent`, `agent` | AI agent |
-| Unpeel | `unpeel` | Always-on terminal sessions for agents |
+| Unpeel | `unpeel` | Always-on terminal sessions for agents; `/workspaces/shares` is registered as a project (override with `PROJECT_DIR`) |
 | lazygit | `lazygit`, `lg` | See what changed, stage, discard, commit |
 | delta | `delta` | Syntax-highlighted diffs (git pager + lazygit) |
 | Fresh | `fresh` | Non-modal editor with file tree, fuzzy open, grep, diff review |
+| typescript-language-server | – | Powers Fresh's go to definition and diagnostics for TS/JS (needs `npm`) |
 | yazi | `yazi`, `y` | File manager with previews |
 | fzf, fd, bat, ripgrep | `fzf`, `fd`, `bat`, `rg` | Fuzzy finder, find, cat, grep (power `ff` / `fs`) |
 
@@ -75,7 +76,7 @@ fresh src/main.rs:42   # open a file at a line
 | `Ctrl+F` / `F3` | Find in file / next match |
 | `Ctrl+R` | Replace in file |
 | `Ctrl+G` | Go to line |
-| `F12` | Go to definition (needs the language server) |
+| `F12` | Go to definition (TS/JS works out of the box; for other languages see `LSP: Server Status` in the palette) |
 | `Alt+←` / `Alt+→` | Jump back / forward |
 | `Ctrl+PgUp` / `Ctrl+PgDn` | Previous / next tab |
 | `Alt+W` | Close tab |
