@@ -1,0 +1,12 @@
+#!/bin/sh
+# Live-search file contents; prints the chosen match as "path:line".
+rg_cmd='rg --column --line-number --no-heading --color=always --smart-case --hidden --glob !.git'
+sel="$(fzf --ansi --disabled --query "$*" \
+    --bind "start:reload:$rg_cmd {q} || true" \
+    --bind "change:reload:$rg_cmd {q} || true" \
+    --delimiter : \
+    --preview 'bat --color=always --style=numbers --highlight-line {2} {1}' \
+    --preview-window '+{2}/2')" || exit 1
+file="${sel%%:*}"
+line="${sel#*:}"
+printf '%s:%s\n' "$file" "${line%%:*}"

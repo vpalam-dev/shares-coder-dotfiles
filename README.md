@@ -22,8 +22,7 @@ which sets `PATH`, `$EDITOR` and the shell helpers below.
 | Unpeel | `unpeel` | Always-on terminal sessions for agents; `/workspaces/shares` is registered as a project (override with `PROJECT_DIR`) |
 | lazygit | `lazygit`, `lg` | See what changed, stage, discard, commit |
 | delta | `delta` | Syntax-highlighted diffs (git pager + lazygit) |
-| Fresh | `fresh` | Non-modal editor with file tree, fuzzy open, grep, diff review |
-| typescript-language-server | – | Powers Fresh's go to definition and diagnostics for TS/JS (needs `npm`) |
+| micro | `micro` | Small non-modal editor: tabs, splits, mouse, normal shortcuts |
 | yazi | `yazi`, `y` | File manager with previews |
 | fzf, fd, bat, ripgrep | `fzf`, `fd`, `bat`, `rg` | Fuzzy finder, find, cat, grep (power `ff` / `fs`) |
 
@@ -48,7 +47,7 @@ git diff main...       # everything this branch changed since it left main
 | `Space` | Stage / unstage file |
 | `a` | Stage / unstage everything |
 | `d` | Discard changes (asks first) |
-| `e` | Open the file in Fresh |
+| `e` | Open the file in micro |
 | `c` / `P` / `p` | Commit / push / pull |
 | `W` | Diff against another branch or commit, e.g. review a whole agent branch vs `main` |
 | `+` / `_` | Enlarge / shrink the diff panel |
@@ -59,55 +58,49 @@ git diff main...       # everything this branch changed since it left main
 | `?` | All keybindings for the current panel |
 | `q` | Quit |
 
-### Fresh (`fresh`) – the editor
+### micro (`micro`) – the editor
 
-Works like a GUI editor: mouse, menus, `Ctrl+S`, `Ctrl+Z`, `Ctrl+C` / `Ctrl+V`.
-
-The Unpeel terminal sends Option as a typed character (`˚`, `≈`), so Fresh's
-`Alt+…` defaults don't work there. [`fresh.json`](fresh.json) rebinds the useful
-ones to the F-keys below; anything else is reachable from `Ctrl+P` → `>`.
+Works like a GUI editor: mouse, `Ctrl+S`, `Ctrl+Z`, `Ctrl+C` / `Ctrl+V`, `Ctrl+Q`.
+The Unpeel terminal sends Option as a typed character (`˚`, `≈`), so micro's
+`Alt+…` defaults don't work there; the keys below avoid Alt.
 
 ```bash
-fresh .                # open the project
-fresh src/main.rs:42   # open a file at a line
+micro a.ts b.ts c.ts   # several files at once, one tab each
+micro src/main.ts:42   # open at a line (also: micro +42 src/main.ts)
 ```
+
+Working with several files:
 
 | Key | Action |
 | --- | --- |
-| `Ctrl+P` | Quick open: files by name. Type `>` for commands, `#` for open buffers, `:` for a line number |
-| `Ctrl+B` / `Ctrl+E` | Toggle / focus the file tree (shows git status; arrows + `Enter`) |
-| `F7` | Live grep across the project (`Shift+F7` resumes the last search) |
-| `Ctrl+F` / `F3` | Find in file / next match |
-| `Ctrl+R` | Replace in file |
-| `Ctrl+G` | Go to line |
-| `F12` | Go to definition (TS/JS works out of the box; for other languages see `LSP: Server Status` in the palette) |
-| `F8` / `Shift+F8` | Jump to next / previous error |
-| `F6` | Hover: shows the error message under the cursor together with type info |
-| `F4` | Code actions (quick fixes) |
-| `Shift+F12` / `F2` | Find references / rename symbol |
-| `F9` / `Shift+F9` | Jump back / forward |
-| `Ctrl+PgUp` / `Ctrl+PgDn` | Previous / next tab |
-| `Ctrl+W` | Close tab |
-| `F5` | Terminal |
-| `Ctrl+S` / `Ctrl+Q` | Save / quit |
+| `Ctrl+P` | Fuzzy-pick files by name and open each in a new tab (`Tab` marks several, `Enter` opens) |
+| `F7` | Live-search file contents, open the match in a new tab at its line |
+| `F5` / `F6` | Previous / next tab (or click the tab bar) |
+| `Ctrl+T` | New empty tab |
+| `Ctrl+O` | Open a file in the current tab (path completion with `Tab`) |
+| `Ctrl+Q` | Close the current tab / split; quits when it was the last one |
+| `Ctrl+E` then `vsplit file` / `hsplit file` | Open a file side by side / stacked |
+| `Ctrl+W` | Jump to the next split |
+| `Ctrl+E` then `tab file` | Open a file in a new tab by path |
 
-Git review lives in the command palette (`Ctrl+P`, then `>`):
+Editing:
 
-| Command | What it does |
+| Key | Action |
 | --- | --- |
-| `Review Diff` | All staged, unstaged and untracked changes in one buffer. `n` / `p` jump between hunks; stage or discard from there |
-| `Review Diff: Range (Commit or Branch)` | Review a whole branch, e.g. `main..HEAD` |
-| `Git Log` | Commit list with a live diff preview |
-| `Git Blame` | Blame for the current file |
-| `Show Diagnostics Panel` | List of all errors and warnings; `↑` `↓` preview, `Enter` jumps |
-| `Live Diff: Toggle` | Mark changed lines in the gutter while browsing |
-| `Keybinding Editor` | See or change any key |
+| `Ctrl+S` | Save |
+| `Ctrl+F` / `Ctrl+N` | Find / next match (`F3` also finds) |
+| `Ctrl+E` then `replace foo bar` | Replace (asks per match; add `-a` for all) |
+| `Ctrl+L` | Go to line |
+| `Ctrl+D` / `Ctrl+K` | Duplicate line / cut line |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / redo |
+| `Ctrl+E` | Command prompt (`ff`, `fs`, `set`, `help` …) |
+| `Ctrl+G` | Help, including all default keys |
 
 ### Jumping around from the shell
 
 | Command | Action |
 | --- | --- |
-| `ff [query]` | Fuzzy-find a file by name with a preview, `Enter` opens it in Fresh |
+| `ff [query]` | Fuzzy-find files by name with a preview; `Tab` marks several, `Enter` opens them as micro tabs |
 | `fs [query]` | Live-search file contents, `Enter` opens the match at its line |
 | `y` | yazi; when you quit, the shell `cd`s to where you ended up |
 | `Ctrl+T` | Paste a fuzzy-picked file path into the current command |
@@ -123,7 +116,7 @@ Three columns: parent, current directory, preview of the selection.
 | Key | Action |
 | --- | --- |
 | `↑` `↓` | Move |
-| `→` / `Enter` | Enter directory / open file in Fresh |
+| `→` / `Enter` | Enter directory / open file in micro |
 | `←` | Parent directory |
 | `z` | Jump to a file or directory with fzf |
 | `s` / `S` | Search by name (fd) / by content (ripgrep) |
@@ -139,5 +132,6 @@ Three columns: parent, current directory, preview of the selection.
 
 - [`install.sh`](install.sh) – installs everything; safe to re-run, skips what is already present.
 - [`shellrc.sh`](shellrc.sh) – `PATH`, `$EDITOR`, fzf key bindings and the `ff` / `fs` / `y` / `lg` helpers.
-- [`fresh.json`](fresh.json) – copied to `~/.config/fresh/config.json` if none exists: Alt-free keybindings.
-- [`lazygit.yml`](lazygit.yml) – copied to `~/.config/lazygit/config.yml` if none exists: delta for diffs, Fresh as the editor.
+- [`micro/`](micro) – copied to `~/.config/micro/` (existing files are kept): Alt-free keys, the `Ctrl+P` / `F7` pickers, clipboard over SSH.
+- [`bin/`](bin) – `ff-pick` / `fs-pick`, the fzf pickers behind `ff`, `fs` and micro's `Ctrl+P` / `F7`.
+- [`lazygit.yml`](lazygit.yml) – copied to `~/.config/lazygit/config.yml` if none exists: delta for diffs, micro as the editor.

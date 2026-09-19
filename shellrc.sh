@@ -6,8 +6,8 @@ case ":$PATH:" in
     *) export PATH="$HOME/.local/bin:$PATH" ;;
 esac
 
-export EDITOR=fresh
-export VISUAL=fresh
+export EDITOR=micro
+export VISUAL=micro
 export BAT_THEME=ansi
 
 # fzf lists files with fd: respects .gitignore, includes dotfiles.
@@ -32,27 +32,26 @@ fi
 
 alias lg=lazygit
 
-# ff [query]: fuzzy-find a file by name and open it.
+# ff [query]: fuzzy-find files by name and open them (Tab selects several,
+# each opens in its own micro tab).
 ff() {
-    local file
-    file="$(fzf --query "$*" --preview 'bat --color=always --style=numbers {}')" || return
-    "$EDITOR" "$file"
+    local files file
+    files="$(ff-pick "$@")" || return
+    # One path per line, so names with spaces survive.
+    set --
+    while IFS= read -r file; do
+        set -- "$@" "$file"
+    done << FILES
+$files
+FILES
+    micro "$@"
 }
 
 # fs [query]: live-search file contents and open the match at its line.
 fs() {
-    local rg_cmd sel file line
-    rg_cmd='rg --column --line-number --no-heading --color=always --smart-case --hidden --glob !.git'
-    sel="$(fzf --ansi --disabled --query "$*" \
-        --bind "start:reload:$rg_cmd {q} || true" \
-        --bind "change:reload:$rg_cmd {q} || true" \
-        --delimiter : \
-        --preview 'bat --color=always --style=numbers --highlight-line {2} {1}' \
-        --preview-window '+{2}/2')" || return
-    file="${sel%%:*}"
-    line="${sel#*:}"
-    line="${line%%:*}"
-    fresh "$file:$line"
+    local sel
+    sel="$(fs-pick "$@")" || return
+    micro "+${sel##*:}" "${sel%:*}"
 }
 
 # y: yazi, but the shell follows you to the directory you quit in.

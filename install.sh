@@ -97,11 +97,11 @@ install "Unpeel"      unpeel       https://unpeel.com/install.sh        sh
 case "$(uname -s)-$(uname -m)" in
     Linux-x86_64 | Linux-amd64)
         rust_arch=x86_64 go_arch=amd64 lazygit_arch=x86_64
-        delta_target=x86_64-unknown-linux-musl
+        delta_target=x86_64-unknown-linux-musl micro_target=linux64-static
         ;;
     Linux-aarch64 | Linux-arm64)
         rust_arch=aarch64 go_arch=arm64 lazygit_arch=arm64
-        delta_target=aarch64-unknown-linux-gnu
+        delta_target=aarch64-unknown-linux-gnu micro_target=linux-arm64
         ;;
     *) rust_arch="" ;;
 esac
@@ -115,26 +115,9 @@ if [ -n "$rust_arch" ]; then
     install_release "fd"      sharkdp/fd            "fd-TAG-$musl.tar.gz"                        fd
     install_release "bat"     sharkdp/bat           "bat-TAG-$musl.tar.gz"                       bat
     install_release "ripgrep" BurntSushi/ripgrep    "ripgrep-VERSION-$musl.tar.gz"               rg
-    install_release "fresh"   sinelaw/fresh         "fresh-editor-$musl.tar.gz"                  fresh
+    install_release "micro"   zyedidia/micro        "micro-VERSION-$micro_target.tar.gz"         micro
 else
     echo "Warning: unsupported platform $(uname -sm), skipping review and navigation tools" >&2
-fi
-
-# TypeScript/JavaScript language server for Fresh (go to definition, diagnostics).
-# typescript is pinned to 6.x: it is the server's fallback when the folder opened
-# in Fresh has no node_modules/typescript (monorepos), and 7.x no longer ships
-# the lib/tsserver.js the server needs.
-if command -v typescript-language-server &> /dev/null && [ -f "$HOME/.local/lib/node_modules/typescript/lib/tsserver.js" ]; then
-    echo "==> typescript-language-server already installed, skipping"
-elif command -v npm &> /dev/null; then
-    echo "==> Installing typescript-language-server..."
-    # --prefix puts the binaries in ~/.local/bin without sudo.
-    if ! npm install -g --prefix "$HOME/.local" typescript-language-server typescript@6; then
-        echo "Warning: typescript-language-server installation failed" >&2
-        failed+=("typescript-language-server")
-    fi
-else
-    echo "Warning: npm not found, skipping typescript-language-server" >&2
 fi
 
 # Unpeel only shares $HOME and registered projects with the app, so register
@@ -160,17 +143,20 @@ if command -v delta &> /dev/null; then
     git config --global merge.conflictStyle zdiff3
 fi
 
-# lazygit: render diffs with delta, open files in fresh.
+# lazygit: render diffs with delta, open files in micro.
 if [ ! -e "$HOME/.config/lazygit/config.yml" ]; then
     mkdir -p "$HOME/.config/lazygit"
     cp "$DOTFILES_DIR/lazygit.yml" "$HOME/.config/lazygit/config.yml"
 fi
 
-# Fresh: Alt-free keys, since the Unpeel terminal sends Option as a character.
-if [ ! -e "$HOME/.config/fresh/config.json" ]; then
-    mkdir -p "$HOME/.config/fresh"
-    cp "$DOTFILES_DIR/fresh.json" "$HOME/.config/fresh/config.json"
-fi
+# micro: tabs on F5/F6, fuzzy open on Ctrl-P/F7, clipboard over SSH.
+mkdir -p "$HOME/.config/micro"
+for file in "$DOTFILES_DIR"/micro/*; do
+    [ -e "$HOME/.config/micro/$(basename "$file")" ] || cp "$file" "$HOME/.config/micro/"
+done
+
+# Pickers shared by the ff/fs shell helpers and micro.
+command install -m 755 "$DOTFILES_DIR/bin/ff-pick" "$DOTFILES_DIR/bin/fs-pick" "$BIN_DIR"
 
 # PATH, $EDITOR and the ff/fs/y/lg helpers for future shell sessions.
 mkdir -p "$CONFIG_DIR"

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Fuzzy-pick files by name; prints one path per line. Tab selects several.
+exec fzf --multi --query "$*" --preview 'bat --color=always --style=numbers {}'

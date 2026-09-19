@@ -1,0 +1,6 @@
+{
+    "Ctrl-p": "lua:initlua.ffOpen",
+    "F7": "lua:initlua.fsOpen",
+    "F5": "PreviousTab|LastTab",
+    "F6": "NextTab|FirstTab"
+}
