@@ -63,6 +63,10 @@ git diff main...       # everything this branch changed since it left main
 
 Works like a GUI editor: mouse, menus, `Ctrl+S`, `Ctrl+Z`, `Ctrl+C` / `Ctrl+V`.
 
+The Unpeel terminal sends Option as a typed character (`˚`, `≈`), so Fresh's
+`Alt+…` defaults don't work there. [`fresh.json`](fresh.json) rebinds the useful
+ones to the F-keys below; anything else is reachable from `Ctrl+P` → `>`.
+
 ```bash
 fresh .                # open the project
 fresh src/main.rs:42   # open a file at a line
@@ -72,20 +76,19 @@ fresh src/main.rs:42   # open a file at a line
 | --- | --- |
 | `Ctrl+P` | Quick open: files by name. Type `>` for commands, `#` for open buffers, `:` for a line number |
 | `Ctrl+B` / `Ctrl+E` | Toggle / focus the file tree (shows git status; arrows + `Enter`) |
-| `Alt+/` | Live grep across the project (`Alt+R` resumes the last search) |
+| `F7` | Live grep across the project (`Shift+F7` resumes the last search) |
 | `Ctrl+F` / `F3` | Find in file / next match |
 | `Ctrl+R` | Replace in file |
 | `Ctrl+G` | Go to line |
 | `F12` | Go to definition (TS/JS works out of the box; for other languages see `LSP: Server Status` in the palette) |
 | `F8` / `Shift+F8` | Jump to next / previous error |
-| `Alt+K` | Hover: shows the error message under the cursor together with type info |
-| `Alt+.` | Code actions (quick fixes) |
+| `F6` | Hover: shows the error message under the cursor together with type info |
+| `F4` | Code actions (quick fixes) |
 | `Shift+F12` / `F2` | Find references / rename symbol |
-| `Alt+←` / `Alt+→` | Jump back / forward |
+| `F9` / `Shift+F9` | Jump back / forward |
 | `Ctrl+PgUp` / `Ctrl+PgDn` | Previous / next tab |
-| `Alt+W` | Close tab |
-| `Alt+]` / `Alt+[` | Next / previous split |
-| `` Alt+` `` | Terminal |
+| `Ctrl+W` | Close tab |
+| `F5` | Terminal |
 | `Ctrl+S` / `Ctrl+Q` | Save / quit |
 
 Git review lives in the command palette (`Ctrl+P`, then `>`):
@@ -136,4 +139,5 @@ Three columns: parent, current directory, preview of the selection.
 
 - [`install.sh`](install.sh) – installs everything; safe to re-run, skips what is already present.
 - [`shellrc.sh`](shellrc.sh) – `PATH`, `$EDITOR`, fzf key bindings and the `ff` / `fs` / `y` / `lg` helpers.
+- [`fresh.json`](fresh.json) – copied to `~/.config/fresh/config.json` if none exists: Alt-free keybindings.
 - [`lazygit.yml`](lazygit.yml) – copied to `~/.config/lazygit/config.yml` if none exists: delta for diffs, Fresh as the editor.

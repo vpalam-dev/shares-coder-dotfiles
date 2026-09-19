@@ -166,6 +166,12 @@ if [ ! -e "$HOME/.config/lazygit/config.yml" ]; then
     cp "$DOTFILES_DIR/lazygit.yml" "$HOME/.config/lazygit/config.yml"
 fi
 
+# Fresh: Alt-free keys, since the Unpeel terminal sends Option as a character.
+if [ ! -e "$HOME/.config/fresh/config.json" ]; then
+    mkdir -p "$HOME/.config/fresh"
+    cp "$DOTFILES_DIR/fresh.json" "$HOME/.config/fresh/config.json"
+fi
+
 # PATH, $EDITOR and the ff/fs/y/lg helpers for future shell sessions.
 mkdir -p "$CONFIG_DIR"
 cp "$DOTFILES_DIR/shellrc.sh" "$CONFIG_DIR/shellrc.sh"
