@@ -1,0 +1,9 @@
+git:
+  diffRenderers:
+    - command: delta --paging=never
+os:
+  edit: 'fresh {{filename}}'
+  editAtLine: 'fresh {{filename}}:{{line}}'
+  editAtLineAndWait: 'fresh {{filename}}:{{line}}'
+  editInTerminal: true
+  openDirInEditor: 'fresh {{dir}}'
