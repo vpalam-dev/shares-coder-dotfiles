@@ -19,7 +19,6 @@ which sets `PATH`, `$EDITOR` and the shell helpers below.
 | Claude Code | `claude` | AI agent |
 | Codex | `codex` | AI agent |
 | Cursor CLI | `cursor-agent`, `agent` | AI agent |
-| Unpeel | `unpeel` | Always-on terminal sessions for agents; `/workspaces/shares` is registered as a project (override with `PROJECT_DIR`) |
 | lazygit | `lazygit`, `lg` | See what changed, stage, discard, commit |
 | delta | `delta` | Syntax-highlighted diffs (git pager + lazygit) |
 | micro | `micro` | Small non-modal editor: tabs, splits, mouse, normal shortcuts |
@@ -61,7 +60,7 @@ git diff main...       # everything this branch changed since it left main
 ### micro (`micro`) – the editor
 
 Works like a GUI editor: mouse, `Ctrl+S`, `Ctrl+Z`, `Ctrl+C` / `Ctrl+V`, `Ctrl+Q`.
-The Unpeel terminal sends Option as a typed character (`˚`, `≈`), so micro's
+Some terminals send Option as a typed character (`˚`, `≈`), so micro's
 `Alt+…` defaults don't work there; the keys below avoid Alt.
 
 ```bash

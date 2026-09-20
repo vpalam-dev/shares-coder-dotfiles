@@ -3,7 +3,6 @@ set -uo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$HOME/.config/coder-dotfiles"
-PROJECT_DIR="${PROJECT_DIR:-/workspaces/shares}"
 
 # Every tool below installs into ~/.local/bin.
 BIN_DIR="$HOME/.local/bin"
@@ -86,12 +85,10 @@ install_release() {
 
 # AI coding agents
 export CODEX_NON_INTERACTIVE=1
-export UNPEEL_INSTALL_DIR="$BIN_DIR"
 
 install "Claude Code" claude       https://claude.ai/install.sh         bash
 install "Codex"       codex        https://chatgpt.com/codex/install.sh sh
 install "Cursor CLI"  cursor-agent https://cursor.com/install           bash
-install "Unpeel"      unpeel       https://unpeel.com/install.sh        sh
 
 # Review and navigation tools (prebuilt Linux binaries from GitHub releases)
 case "$(uname -s)-$(uname -m)" in
@@ -118,20 +115,6 @@ if [ -n "$rust_arch" ]; then
     install_release "micro"   zyedidia/micro        "micro-VERSION-$micro_target.tar.gz"         micro
 else
     echo "Warning: unsupported platform $(uname -sm), skipping review and navigation tools" >&2
-fi
-
-# Unpeel only shares $HOME and registered projects with the app, so register
-# the workspace project, which lives outside $HOME.
-if command -v unpeel &> /dev/null && [ -d "$PROJECT_DIR" ]; then
-    if unpeel projects list 2> /dev/null | grep -qF "$PROJECT_DIR"; then
-        echo "==> Unpeel project $PROJECT_DIR already registered, skipping"
-    else
-        echo "==> Registering $PROJECT_DIR as an Unpeel project..."
-        if ! unpeel add "$PROJECT_DIR" --name "$(basename "$PROJECT_DIR")"; then
-            echo "Warning: could not register $PROJECT_DIR with Unpeel" >&2
-            failed+=("Unpeel project")
-        fi
-    fi
 fi
 
 # Syntax-highlighted diffs for plain git commands.

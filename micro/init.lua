@@ -1,5 +1,5 @@
 -- Fuzzy open from inside micro, using the ff-pick / fs-pick helpers.
--- Alt-free on purpose: the Unpeel terminal sends Option as a character.
+-- Alt-free on purpose: some terminals send Option as a character.
 local micro = import("micro")
 local shell = import("micro/shell")
 local config = import("micro/config")
