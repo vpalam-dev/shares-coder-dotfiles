@@ -23,7 +23,7 @@ which sets `PATH`, `$EDITOR` and the shell helpers below.
 | delta | `delta` | Syntax-highlighted diffs (git pager + lazygit) |
 | micro | `micro` | Small non-modal editor: tabs, splits, mouse, normal shortcuts |
 | yazi | `yazi`, `y` | File manager with previews |
-| fzf, fd, bat, ripgrep | `fzf`, `fd`, `bat`, `rg` | Fuzzy finder, find, cat, grep (power `ff` / `fs`) |
+| fzf, fd, bat, ripgrep | `fzf`, `fd`, `bat`, `rg` (also `ripgrep`) | Fuzzy finder, find, cat, grep (power `ff` / `fs`) |
 
 ## Cheatsheet
 

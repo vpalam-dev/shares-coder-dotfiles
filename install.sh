@@ -117,6 +117,11 @@ else
     echo "Warning: unsupported platform $(uname -sm), skipping review and navigation tools" >&2
 fi
 
+# Some tools invoke ripgrep by its full name, others expect "rg": provide both.
+if command -v rg &> /dev/null && ! command -v ripgrep &> /dev/null; then
+    ln -sf "$(command -v rg)" "$BIN_DIR/ripgrep"
+fi
+
 # Syntax-highlighted diffs for plain git commands.
 if command -v delta &> /dev/null; then
     git config --global core.pager delta
